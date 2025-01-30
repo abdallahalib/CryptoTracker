@@ -36,7 +36,6 @@ class CoinListViewModel(
 
     fun onAction(action: CoinListAction) {
         when (action) {
-            CoinListAction.OnRefresh -> loadCoins()
             is CoinListAction.OnCoinClicked -> selectCoin(action.coinUi)
         }
     }
@@ -54,6 +53,7 @@ class CoinListViewModel(
                     println(history)
                 }
                 .onError { error ->
+                    _state.update { it.copy(isLoading = false) }
                     _events.send(CoinListEvent.Error(error))
                 }
         }
