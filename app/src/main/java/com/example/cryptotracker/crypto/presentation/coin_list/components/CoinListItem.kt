@@ -88,7 +88,7 @@ fun CoinListItem(
 
 @PreviewLightDark
 @Composable
-fun CoinListItemPreview() {
+private fun CoinListItemPreview() {
     CryptoTrackerTheme {
         CoinListItem(
             coinUi = previewCoin,

@@ -11,7 +11,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 object HttpClientFactory {
@@ -23,14 +23,7 @@ object HttpClientFactory {
                 level = LogLevel.ALL
             }
             install(ContentNegotiation) {
-                register(
-                    ContentType.Text.Html,
-                    KotlinxSerializationConverter(
-                        Json {
-                            ignoreUnknownKeys = true
-                        }
-                    )
-                )
+                json(Json { ignoreUnknownKeys = true })
             }
             defaultRequest {
                 url(BuildConfig.BASE_URL)
