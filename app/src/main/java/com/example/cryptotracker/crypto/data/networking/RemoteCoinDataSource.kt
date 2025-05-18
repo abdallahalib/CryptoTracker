@@ -1,5 +1,6 @@
 package com.example.cryptotracker.crypto.data.networking
 
+import com.example.cryptotracker.BuildConfig
 import com.example.cryptotracker.core.domain.util.Result
 import com.example.cryptotracker.core.data.networking.safeCall
 import com.example.cryptotracker.core.domain.util.NetworkError
@@ -22,7 +23,7 @@ class RemoteCoinDataSource(
 ): CoinDataSource {
     override suspend fun getCoins(): Result<List<Coin>, NetworkError> {
         return safeCall<CoinsResponseDto> {
-            httpClient.get("assets")
+            httpClient.get("assets?apiKey=${BuildConfig.API_KEY}")
         }.map { response ->
             response.data.map { it.toCoin() }
         }
@@ -36,7 +37,7 @@ class RemoteCoinDataSource(
         val startMs = start.withZoneSameInstant(ZoneId.of("UTC")).toInstant().toEpochMilli()
         val endMs = end.withZoneSameInstant(ZoneId.of("UTC")).toInstant().toEpochMilli()
         return safeCall<CoinHistoryDto> {
-            httpClient.get("assets/$coinId/history") {
+            httpClient.get("assets/$coinId/history?apiKey=${BuildConfig.API_KEY}") {
                 parameter("interval", "h6")
                 parameter("start", startMs)
                 parameter("end", endMs)
